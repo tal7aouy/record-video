@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // set up varibale needed
 
 const constraintObj = {
-  audio: false,
+  audio: false, //audio is disable
   video: {
     facingMode: 'user', //facingMode:{exact:"user"}
     width: { min: 640, ideal: 1080, max: 1920 },
