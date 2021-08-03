@@ -21,7 +21,30 @@ const constraintObj = {
   },
 }
 
-// handle for older browser
+// handle for older browser that might implement getUSerMedia in some way
+if (navigator.mediaDevices === 'undefined') {
+  navigator.mediaDevices = {}
+  navigator.mediaDevices.enumurateDevices().then((devices) => {
+    navigator.mediaDevices.getUserMedia = function (constraints) {
+      let getUserMedia =
+        navigator.webKitGetUserMedia || navigator.mowGetUserMedia
+      if (!getUserMedia) {
+        return new Promise.reject(
+          new Error('getUserMedia is not implemented in this browser .')
+        )
+      }
+      return new Promise(function (resolve, reject) {
+        getUserMedia.call(navigator, constraints, resolve, reject)
+      })
+    }
+  })
+} else {
+  navigator.mediaDevices.enumerateDevices().then((devices) => {
+    devices.forEach((device) => {
+      console.log(device.kind.toUpperCase(), device.label)
+    })
+  })
+}
 
 navigator.mediaDevices
   .getUserMedia(constraintObj)
